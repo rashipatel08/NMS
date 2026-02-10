@@ -8,18 +8,22 @@ m = manager.connect(
     hostkey_verify=False
 )
 
-delete_loopback_xml = """
+loopback_xml = """
 <config>
   <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
-    <interface operation="delete">
+    <interface>
       <name>Loopback100</name>
+      <type xmlns:ianaift="urn:ietf:params:xml:ns:yang:iana-if-type">
+        ianaift:softwareLoopback
+      </type>
+      <enabled>true</enabled>
     </interface>
   </interfaces>
 </config>
 """
 
-m.edit_config(target="running", config=delete_loopback_xml)
+m.edit_config(target="running", config=loopback_xml)
 
-print("Loopback deleted successfully")
+print("Loopback created successfully")
 
 m.close_session()
