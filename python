@@ -1,0 +1,92 @@
+from ncclient import manager
+
+# ===== ROUTER DETAILS =====
+routers = [
+    {"host": "R1_IP", "username": "nms", "password": "cisco"},
+    {"host": "R2_IP", "username": "nms", "password": "cisco"}
+]
+
+PORT = 830
+
+# ===== FUNCTION: CONNECT =====
+def connect_device(router):
+    return manager.connect(
+        host=router["host"],
+        port=PORT,
+        username=router["username"],
+        password=router["password"],
+        hostkey_verify=False
+    )
+
+# ===== OPERATION 1: GET CONFIG =====
+def get_config(router):
+    with connect_device(router) as m:
+        config = m.get_config(source="running")
+        print(f"\nRunning config of {router['host']}")
+        print(config.xml)
+
+# ===== OPERATION 2: EDIT CONFIG =====
+def create_loopback(router):
+    config_data = """
+    <config>
+      <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+        <interface>
+          <name>Loopback10</name>
+          <description>Configured via NETCONF</description>
+          <enabled>true</enabled>
+        </interface>
+      </interfaces>
+    </config>
+    """
+    with connect_device(router) as m:
+        response = m.edit_config(target="running", config=config_data)
+        print(f"\nLoopback created on {router['host']}")
+        print(response)
+
+# ===== OPERATION 3: DELETE CONFIG =====
+def delete_loopback(router):
+    delete_data = """
+    <config>
+      <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+        <interface operation="delete">
+          <name>Loopback10</name>
+        </interface>
+      </interfaces>
+    </config>
+    """
+    with connect_device(router) as m:
+        response = m.edit_config(target="running", config=delete_data)
+        print(f"\nLoopback deleted on {router['host']}")
+        print(response)
+
+# ===== MAIN MENU =====
+def main():
+    while True:
+        print("\nNETCONF NMS MENU")
+        print("1. Get Running Config")
+        print("2. Create Loopback10")
+        print("3. Delete Loopback10")
+        print("4. Exit")
+
+        choice = input("Enter choice: ")
+
+        if choice == "1":
+            for r in routers:
+                get_config(r)
+
+        elif choice == "2":
+            for r in routers:
+                create_loopback(r)
+
+        elif choice == "3":
+            for r in routers:
+                delete_loopback(r)
+
+        elif choice == "4":
+            break
+
+        else:
+            print("Invalid choice")
+
+if __name__ == "__main__":
+    main()
