@@ -90,3 +90,45 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
+
+
+
+
+
+
+from ncclient import manager
+
+# ===== ROUTER DETAILS =====
+routers = [
+    {"host": "172.20.0.184", "username": "nms", "password": "cisco"}
+]
+
+PORT = 830
+
+# ===== FUNCTION: CONNECT =====
+def connect_device(router):
+    return manager.connect(
+        host=router["host"],
+        port=PORT,
+        username=router["username"],
+        password=router["password"],
+        hostkey_verify=False,
+        device_params={'name': 'csr'}   # important for CSR1000v
+    )
+
+# ===== OPERATION 1: GET CONFIG =====
+def get_config(router):
+    with connect_device(router) as m:
+        config = m.get_config(source="running")
+        print(f"\nRunning config of {router['host']}")
+        print(config.xml)
+
+# ===== RUN SCRIPT =====
+if __name__ == "__main__":
+    for router in routers:
+        get_config(router)
