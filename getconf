@@ -1,22 +1,25 @@
 from ncclient import manager
 
-router = {
-    "host": "172.20.0.184",
-    "port": 830,
-    "username": "nms",
-    "password": "cisco"
-}
+m = manager.connect(
+    host="192.168.1.1",
+    port=830,
+    username="admin",
+    password="admin123",
+    hostkey_verify=False
+)
 
-with manager.connect(
-    host=router["host"],
-    port=router["port"],
-    username=router["username"],
-    password=router["password"],
-    hostkey_verify=False,
-    device_params={'name': 'csr'}
-) as m:
+delete_loopback_xml = """
+<config>
+  <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+    <interface operation="delete">
+      <name>Loopback100</name>
+    </interface>
+  </interfaces>
+</config>
+"""
 
-    config = m.get_config(source="running")
+m.edit_config(target="running", config=delete_loopback_xml)
 
-    print("\n=== RUNNING CONFIGURATION ===")
-    print(config.xml)
+print("Loopback deleted successfully")
+
+m.close_session()
