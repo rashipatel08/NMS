@@ -1,0 +1,33 @@
+from ncclient import manager
+
+router = {
+    "host": "172.20.0.184",
+    "username": "nms",
+    "password": "cisco"
+}
+
+loopback_config = """
+<config>
+  <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+    <interface>
+      <name>Loopback10</name>
+      <description>Configured via NETCONF</description>
+      <enabled>true</enabled>
+    </interface>
+  </interfaces>
+</config>
+"""
+
+with manager.connect(
+    host=router["host"],
+    port=830,
+    username=router["username"],
+    password=router["password"],
+    hostkey_verify=False,
+    device_params={'name': 'csr'}
+) as m:
+
+    response = m.edit_config(target="running", config=loopback_config)
+
+    print("\n=== CONFIG APPLIED SUCCESSFULLY ===")
+    print(response)
