@@ -1,0 +1,21 @@
+from ncclient import manager
+
+router = {
+    "host": "172.20.0.184",
+    "username": "nms",
+    "password": "cisco"
+}
+
+with manager.connect(
+    host=router["host"],
+    port=830,
+    username=router["username"],
+    password=router["password"],
+    hostkey_verify=False,
+    device_params={'name': 'csr'}
+) as m:
+
+    config = m.get_config(source="running")
+
+    print("\n=== RUNNING CONFIGURATION ===")
+    print(config.xml)
