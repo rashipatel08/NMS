@@ -2,13 +2,14 @@ from ncclient import manager
 
 router = {
     "host": "172.20.0.184",
+    "port": 830,
     "username": "nms",
     "password": "cisco"
 }
 
 with manager.connect(
     host=router["host"],
-    port=830,
+    port=router["port"],
     username=router["username"],
     password=router["password"],
     hostkey_verify=False,
