@@ -2,32 +2,41 @@ from ncclient import manager
 
 router = {
     "host": "172.20.0.184",
+    "port": 830,
     "username": "nms",
     "password": "cisco"
 }
 
-loopback_config = """
+config_data = """
 <config>
-  <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
+  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
     <interface>
-      <name>Loopback10</name>
-      <description>Configured via NETCONF</description>
-      <enabled>true</enabled>
+      <Loopback>
+        <name>100</name>
+        <ip>
+          <address>
+            <primary>
+              <address>100.100.100.1</address>
+              <mask>255.255.255.255</mask>
+            </primary>
+          </address>
+        </ip>
+      </Loopback>
     </interface>
-  </interfaces>
+  </native>
 </config>
 """
 
 with manager.connect(
     host=router["host"],
-    port=830,
+    port=router["port"],
     username=router["username"],
     password=router["password"],
     hostkey_verify=False,
     device_params={'name': 'csr'}
 ) as m:
 
-    response = m.edit_config(target="running", config=loopback_config)
+    response = m.edit_config(target="running", config=config_data)
 
-    print("\n=== CONFIG APPLIED SUCCESSFULLY ===")
+    print("\n=== CONFIGURATION APPLIED ===")
     print(response)
