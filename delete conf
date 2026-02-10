@@ -2,30 +2,33 @@ from ncclient import manager
 
 router = {
     "host": "172.20.0.184",
+    "port": 830,
     "username": "nms",
     "password": "cisco"
 }
 
-delete_config = """
+delete_data = """
 <config>
-  <interfaces xmlns="urn:ietf:params:xml:ns:yang:ietf-interfaces">
-    <interface operation="delete">
-      <name>Loopback10</name>
+  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+    <interface>
+      <Loopback operation="delete">
+        <name>100</name>
+      </Loopback>
     </interface>
-  </interfaces>
+  </native>
 </config>
 """
 
 with manager.connect(
     host=router["host"],
-    port=830,
+    port=router["port"],
     username=router["username"],
     password=router["password"],
     hostkey_verify=False,
     device_params={'name': 'csr'}
 ) as m:
 
-    response = m.edit_config(target="running", config=delete_config)
+    response = m.edit_config(target="running", config=delete_data)
 
-    print("\n=== CONFIG DELETED SUCCESSFULLY ===")
+    print("\n=== CONFIGURATION REMOVED ===")
     print(response)
