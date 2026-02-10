@@ -3,9 +3,9 @@ from lxml import etree
 from ncclient.transport.errors import SSHError, AuthenticationError, SessionCloseError
 
 # NETCONF device connection details
-HOST = '172.20.0.46'
+HOST = '172.20.0.155'
 PORT = 830
-USERNAME = 'admin'
+USERNAME = 'nms'
 PASSWORD = 'cisco'
 
 def get_running_config():
