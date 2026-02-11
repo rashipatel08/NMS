@@ -51,20 +51,28 @@ with manager.connect(
 
 
 
-<config>
-  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
-    <interface>
-      <Loopback>
-        <name>10</name>
-        <ip>
-          <address>
-            <primary>
-              <address>10.10.10.10</address>
-              <mask>255.255.255.255</mask>
-            </primary>
-          </address>
-        </ip>
-      </Loopback>
-    </interface>
-  </native>
-</config>
+<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="101">
+  <edit-config>
+    <target>
+      <running/>
+    </target>
+    <config>
+      <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+        <interface>
+          <Loopback>
+            <name>10</name>
+            <description>Test Loopback10</description>
+            <ip>
+              <address>
+                <primary>
+                  <address>10.10.10.1</address>
+                  <mask>255.255.255.0</mask>
+                </primary>
+              </address>
+            </ip>
+          </Loopback>
+        </interface>
+      </native>
+    </config>
+  </edit-config>
+</rpc>
