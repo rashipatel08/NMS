@@ -32,3 +32,11 @@ with manager.connect(
 
     print("\n=== CONFIGURATION REMOVED ===")
     print(response)
+
+
+
+
+
+<Loopback nc:operation="delete">
+  <name>10</name>
+</Loopback>
