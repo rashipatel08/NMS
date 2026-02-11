@@ -40,3 +40,31 @@ with manager.connect(
 
     print("\n=== CONFIGURATION APPLIED ===")
     print(response)
+
+
+
+
+
+
+
+
+
+
+
+<config>
+  <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+    <interface>
+      <Loopback>
+        <name>10</name>
+        <ip>
+          <address>
+            <primary>
+              <address>10.10.10.10</address>
+              <mask>255.255.255.255</mask>
+            </primary>
+          </address>
+        </ip>
+      </Loopback>
+    </interface>
+  </native>
+</config>
