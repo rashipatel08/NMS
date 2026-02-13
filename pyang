@@ -1,0 +1,7 @@
+import subprocess
+
+yang_file = "ietf-interfaces.yang"
+
+print("Generating YANG tree structure...\n")
+
+subprocess.run(["pyang", "-f", "tree", yang_file])
