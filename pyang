@@ -45,3 +45,42 @@ print("STEP 3: Displaying YANG tree structure...\n")
 subprocess.run(["pyang", "-f", "tree", yang_file])
 
 print("\nYANG model is ready for NETCONF automation.")
+
+module project-interfaces {
+  namespace "http://example.com/project-interfaces";
+  prefix pif;
+
+  organization "Network Automation Project";
+  description
+    "YANG model for configuring Loopback interfaces via NETCONF";
+
+  revision 2026-02-13 {
+    description "Initial version";
+  }
+
+  container interfaces {
+    description "Interface configuration container";
+
+    list interface {
+      key "name";
+      description "Interface list";
+
+      leaf name {
+        type string;
+        description "Interface name (e.g., Loopback10)";
+      }
+
+      leaf description {
+        type string;
+        description "Interface description";
+      }
+
+      leaf enabled {
+        type boolean;
+        default true;
+        description "Administrative state of interface";
+      }
+    }
+  }
+}
+
