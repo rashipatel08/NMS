@@ -5,3 +5,25 @@ yang_file = "ietf-interfaces.yang"
 print("Generating YANG tree structure...\n")
 
 subprocess.run(["pyang", "-f", "tree", yang_file])
+
+
+
+STEP 1: Checking if YANG file exists...
+
+YANG file found.
+
+STEP 2: Validating YANG model...
+
+Validation SUCCESS — Model is correct.
+
+STEP 3: Displaying YANG tree structure...
+
+module: ietf-interfaces
+  +--rw interfaces
+     +--rw interface* [name]
+        +--rw name
+        +--rw description?
+        +--rw enabled?
+
+YANG model is ready for NETCONF automation.
+
