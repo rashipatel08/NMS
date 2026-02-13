@@ -8,22 +8,40 @@ subprocess.run(["pyang", "-f", "tree", yang_file])
 
 
 
-STEP 1: Checking if YANG file exists...
+import subprocess
+import sys
+import os
 
-YANG file found.
+# YANG model used in your project
+yang_file = "ietf-interfaces.yang"
 
-STEP 2: Validating YANG model...
+print("\nSTEP 1: Checking if YANG file exists...\n")
 
-Validation SUCCESS — Model is correct.
+if not os.path.exists(yang_file):
+    print("ERROR: YANG file not found in project folder.")
+    sys.exit()
 
-STEP 3: Displaying YANG tree structure...
+print("YANG file found.\n")
 
-module: ietf-interfaces
-  +--rw interfaces
-     +--rw interface* [name]
-        +--rw name
-        +--rw description?
-        +--rw enabled?
+# STEP 2 — Validate YANG model
+print("STEP 2: Validating YANG model...\n")
 
-YANG model is ready for NETCONF automation.
+validation = subprocess.run(
+    ["pyang", yang_file],
+    capture_output=True,
+    text=True
+)
 
+if validation.returncode != 0:
+    print("Validation FAILED:\n")
+    print(validation.stderr)
+    sys.exit()
+
+print("Validation SUCCESS — Model is correct.\n")
+
+# STEP 3 — Show model structure (tree format)
+print("STEP 3: Displaying YANG tree structure...\n")
+
+subprocess.run(["pyang", "-f", "tree", yang_file])
+
+print("\nYANG model is ready for NETCONF automation.")
