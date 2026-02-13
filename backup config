@@ -1,0 +1,39 @@
+from netmiko import ConnectHandler
+from datetime import datetime
+
+device = {
+    "device_type": "cisco_ios",
+    "host": "172.20.0.155",
+    "username": "nms",
+    "password": "cisco"
+}
+
+print("Connecting to router...\n")
+connection = ConnectHandler(**device)
+
+# Step 1 — Check if NETCONF is enabled
+print("Checking NETCONF status...\n")
+netconf_status = connection.send_command(
+    "show running-config | include netconf"
+)
+print(netconf_status if netconf_status else "NETCONF not configured")
+
+# Step 2 — Get full running configuration
+print("\nRetrieving running configuration...\n")
+running_config = connection.send_command("show running-config")
+
+# Step 3 — Save to file
+timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+filename = f"router_backup_{timestamp}.txt"
+
+with open(filename, "w") as file:
+    file.write(running_config)
+
+print(f"Configuration saved to {filename}")
+
+# Step 4 — Show device info
+print("\nDevice Information:\n")
+print(connection.send_command("show version | include IOS"))
+
+connection.disconnect()
+print("\nBackup process completed successfully.")
